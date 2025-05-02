@@ -7,7 +7,7 @@ function VideoPlayer() {
   const [progress, setProgress] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
 
-  let playStartTime = null; // Start of a play session
+  let playStartTime = null; 
 
   const mergeIntervals = (intervals) => {
     if (intervals.length === 0) return [];
@@ -46,23 +46,23 @@ function VideoPlayer() {
         if (playEndTime > playStartTime) {
           const newInterval = [playStartTime, playEndTime];
 
-          // 👉 Merge new interval with previously watched intervals
+          
           const updatedIntervals = mergeIntervals([...watchedIntervals, newInterval]);
 
-          // 👉 calculate progress from merged unique intervals
+         
           const updatedProgress = calculateProgress(updatedIntervals);
 
           setWatchedIntervals(updatedIntervals);
           setProgress(updatedProgress);
 
-          // 👉 Post updated intervals to backend
-          await axios.post('http://localhost:5000/api/progress', {
+          
+          await axios.post('https://video-progress-tracker-b001.onrender.com', {
             userId: 'user123',
             videoId: 'video001',
             intervals: updatedIntervals
           });
         }
-        playStartTime = null; // Reset start
+        playStartTime = null; 
       }
     };
 
@@ -82,7 +82,7 @@ function VideoPlayer() {
   }, [watchedIntervals, videoDuration]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/progress/user123/video001')
+    axios.get('https://video-progress-tracker-b001.onrender.com')
       .then(res => {
         if (res.data && res.data.intervals.length > 0) {
           const merged = mergeIntervals(res.data.intervals);
